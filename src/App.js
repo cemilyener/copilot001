@@ -6,15 +6,14 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Production ortamında tam URL kullan
-    const apiUrl = process.env.NODE_ENV === "production"
-      ? "https://copilot001.vercel.app/api/connectToDB"
-      : "/api/connectToDB";
+    const apiUrl = "https://copilot001.vercel.app/api/connectToDB";
 
     fetch(apiUrl)
       .then((response) => {
         if (!response.ok) {
-          throw new Error(`HTTP hatası! Durum: ${response.status}`);
+          return response.text().then((text) => {
+            throw new Error(`HTTP hatası! Durum: ${response.status}, Yanıt: ${text}`);
+          });
         }
         return response.json();
       })
@@ -26,7 +25,6 @@ function App() {
         }
       })
       .catch((error) => {
-        console.error("Fetch Hatası:", error);
         setError(error.message);
       })
       .finally(() => setLoading(false));
