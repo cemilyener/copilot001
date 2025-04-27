@@ -8,7 +8,12 @@ function App() {
   useEffect(() => {
     const apiUrl = "https://copilot001.vercel.app/api/connectToDB";
 
-    fetch(apiUrl)
+    fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           return response.text().then((text) => {
